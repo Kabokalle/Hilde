@@ -7,17 +7,16 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Waschguide" />
   <meta name="theme-color" content="#0f172a" />
-  <title>Vera wäscht</title>
+  <title>Vera wäscht · Bosch WAN282K3</title>
   <style>
     :root { 
-      --primary: #ff4d8d;    /* Kräftiges Candy Pink */
-      --secondary: #ff85a2;  /* Sanfteres Pink */
-      --bg: #4a152c;         /* Dunkles Beeren-Lila */
+      --primary: #ff4d8d;
+      --secondary: #ff85a2;
+      --bg: #4a152c;
       --card: #ffffff; 
       --text: #4a152c; 
-      --accent: #ff1a75;     /* Knall-Pink */
+      --accent: #ff1a75;
       --safe: #4caf50; 
-      --dry: #ff9800;
       --sos: #ef4444;
       --card-bg: rgba(255, 255, 255, 0.96);
       --safe-top: env(safe-area-inset-top);
@@ -36,7 +35,6 @@
       font-size: 17px;
       -webkit-font-smoothing: antialiased;
     }
-    /* Die durchscheinenden, süßen Bildchen im Hintergrund */
     body::before {
       content: '🧸 ✨ 🎀 🫧 🧸 ✨ 🎀 🫧 🧸 ✨ 🎀 🫧 🧸 ✨ 🎀 🫧';
       position: fixed;
@@ -60,14 +58,12 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
     }
-    
     .step-box { display: none; animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
     .step-box.active { display: block; }
     @keyframes popUp { 
       from { opacity: 0; transform: translateY(20px) scale(0.95); } 
       to { opacity: 1; transform: translateY(0) scale(1); } 
     }
-
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
     button { 
       background: white; color: var(--text); border: 3px solid #ffdae9; 
@@ -76,9 +72,9 @@
       box-shadow: 0 5px 0 #ffdae9;
       display: flex; flex-direction: column; align-items: center; gap: 8px;
       min-height: 54px;
+      width: 100%;
     }
     button:active { transform: translateY(4px); box-shadow: 0 1px 0 #ffdae9; }
-    button.mode-btn { background: white; padding: 1.3rem; }
     button.next { 
       background: linear-gradient(135deg, var(--primary), var(--accent)); 
       color: white; border: none; width: 100%; margin-top: 25px; 
@@ -103,6 +99,112 @@
       margin: 12px 0;
     }
 
+    /* ── ECHTER BOSCH-DREHREGLER ── */
+    .knob-container { 
+      text-align: center; margin: 20px 0; background: #fff0f5; 
+      padding: 25px 15px; border-radius: 35px; border: 3px solid #ffdae9;
+    }
+    .knob-outer {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      margin: 0 auto;
+    }
+    /* Ring mit Programmbeschriftungen */
+    .program-ring {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      background: #f8f8f8;
+      border: 2px solid #e0e0e0;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .prog-tick {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+    }
+    .prog-tick span {
+      position: absolute;
+      font-size: 0.58rem;
+      font-weight: 700;
+      color: #aaa;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      transition: all 0.3s ease;
+      text-align: center;
+      line-height: 1.1;
+    }
+    .prog-tick span.active {
+      color: var(--accent);
+      font-size: 0.65rem;
+      text-shadow: 0 0 8px rgba(255,26,117,0.4);
+    }
+    /* Der eigentliche Knopf in der Mitte */
+    .knob-btn {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 108px; height: 108px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: linear-gradient(145deg, #ffffff, #e8e8e8);
+      border: 3px solid #d0d0d0;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 1px 3px rgba(255,255,255,0.8);
+      display: flex; align-items: center; justify-content: center;
+      cursor: default;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .knob-marker {
+      width: 6px; height: 30px;
+      background: linear-gradient(to bottom, var(--accent), #ff85a2);
+      border-radius: 3px;
+      position: absolute;
+      top: 10px; left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 8px rgba(255,26,117,0.5);
+    }
+    .knob-center-dot {
+      width: 22px; height: 22px;
+      background: radial-gradient(circle, #e0e0e0, #c8c8c8);
+      border-radius: 50%;
+      position: absolute;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    /* Tasten-Leiste */
+    .bosch-buttons {
+      display: flex; gap: 6px; margin: 15px 0;
+      overflow-x: auto; padding-bottom: 5px;
+    }
+    .bosch-btn {
+      flex: 0 0 auto;
+      background: #1a1a2e;
+      color: #aaa;
+      border: 1.5px solid #333;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.2;
+      cursor: default;
+      min-width: 55px;
+      transition: all 0.3s;
+    }
+    .bosch-btn.highlight {
+      background: #0d2b45;
+      color: #4fc3f7;
+      border-color: #4fc3f7;
+      box-shadow: 0 0 8px rgba(79,195,247,0.4);
+    }
+    .bosch-btn.start-btn {
+      background: #1a1a2e;
+      color: #888;
+      border-color: #444;
+    }
+
     .drawer { display: flex; gap: 10px; margin: 15px 0; }
     .compartment { 
       border: 3px solid #ffdae9; padding: 12px 8px; border-radius: 15px; 
@@ -110,25 +212,6 @@
       background: white; font-weight: 700;
     }
     .compartment.active { border-color: var(--primary); background: #fff0f5; color: var(--accent); }
-
-    .knob-container { 
-      text-align: center; margin: 25px 0; background: #fff0f5; 
-      padding: 30px 15px; border-radius: 35px; border: 3px solid #ffdae9;
-    }
-    .knob-wrapper { position: relative; width: 180px; height: 180px; margin: 0 auto; }
-    .knob-svg { 
-      width: 100%; height: 100%; 
-      transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1); 
-    }
-    .knob-svg circle { fill: #ffffff; stroke: var(--primary); stroke-width: 4; }
-    .knob-svg rect { fill: var(--accent); }
-    .program-labels { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-    .prog-label { 
-      position: absolute; font-size: 0.7rem; color: var(--secondary); font-weight: 800;
-      transform: translate(-50%, -50%); white-space: nowrap;
-      transition: all 0.3s;
-    }
-    .prog-label.active { color: var(--accent); transform: translate(-50%, -50%) scale(1.2); text-shadow: 0 0 10px white; }
     
     h1 { 
       font-size: 2rem; text-align: center; color: var(--accent); 
@@ -136,7 +219,11 @@
     }
     h2 { color: var(--accent); font-size: 1.5rem; margin: 0; }
     .subtle-hint { font-size: 0.9rem; color: var(--secondary); text-align: center; margin-top: 8px; font-style: italic; min-height: 1.2rem; }
-    
+    .model-badge {
+      text-align: center; font-size: 0.75rem; color: #888; margin-bottom: 20px;
+      letter-spacing: 1px; font-weight: 600;
+    }
+
     .stain-item { 
       background: #fff; padding: 14px 16px; border-radius: 18px; margin-bottom: 12px; 
       border: 2px solid #ffdae9; border-left: 5px solid var(--sos); font-size: 0.95rem; 
@@ -148,423 +235,356 @@
     }
     .maint-item b { color: var(--safe); }
     .freq { font-size: 0.8rem; color: var(--secondary); display: block; margin-top: 5px; }
+
+    /* Speed Perfect Hinweis */
+    .speed-badge {
+      display: inline-block; background: #fff3cd; color: #7d5a00;
+      border: 1.5px solid #ffc107; border-radius: 12px;
+      padding: 4px 10px; font-size: 0.78rem; font-weight: 700;
+      margin-top: 8px;
+    }
   </style>
 </head>
 <body onload="initApp()">
-
 <div class="card">
   
+  <!-- STEP 1: Wäsche wählen -->
   <div id="step1" class="step-box active">
     <h1 id="welcome-msg">Hallo Vera! ✨</h1>
+    <p class="model-badge">Du schaffst das! </p>
     <p id="welcome-sub" style="text-align:center; font-weight:700; color: var(--bg); margin-bottom:25px;"></p>
     <div class="grid">
-      <button onclick="tap(); selectType('baumwolle', 'Baumwolle', 'Vollwaschmittel (Pulver)', '40°C')">👕 Alltag</button>
-      <button onclick="tap(); selectType('kochwaesche', 'Baumwolle', 'Vollwaschmittel (Pulver)', '60°C')">🛁 Handtücher</button>
-      <button onclick="tap(); selectType('hygiene', 'Baumwolle', 'Vollwaschmittel (Pulver)', '90°C')">🦠 Hygiene</button>
-      <button onclick="tap(); selectType('mix', 'Mischwäsche', 'Colorwaschmittel (Pulver)', '40°C')">🌈 Mix</button>
-      <button onclick="tap(); selectType('sport', 'Synthetik', 'Colorwaschmittel (Pulver)', '40°C')">🏃 Sport</button>
-      <button onclick="tap(); selectType('anti', 'Anti-Allergie', 'Vollwaschmittel (Pulver)', '60°C')">🛡️ Allergie</button>
-      <button onclick="tap(); selectType('wolle', 'Wolle', 'Wollwaschmittel', '30°C')">🐑 Wolle</button>
-      <button onclick="tap(); selectType('daunen', 'Baumwolle', 'Daunenwaschmittel', '60°C')">🪶 Daunen</button>
-      <button onclick="tap(); selectType('schnell', 'Schnell 15\'', 'Colorwaschmittel (Pulver)', '30°C')">🕒 Schnell</button>
-      <button onclick="tap(); selectType('pflege', 'Pflegeleicht', 'Colorwaschmittel (Pulver)', '40°C')">👗 Pflege</button>
+      <button onclick="tap(); selectType('baumwolle',   'Baumwolle',         'Vollwaschmittel (Pulver)',   '40°C', 1400)">👕 Alltag</button>
+      <button onclick="tap(); selectType('baumwolle60', 'Baumwolle',         'Vollwaschmittel (Pulver)',   '60°C', 1400)">🛁 Handtücher 60°</button>
+      <button onclick="tap(); selectType('baumwolle90', 'Baumwolle',         'Vollwaschmittel (Pulver)',   '90°C', 1400)">🛁 Handtücher 90°</button>
+      <button onclick="tap(); selectType('hygiene',     'Hygiene Plus',      'Vollwaschmittel (Pulver)',   '60°C', 1400)">🦠 Hygiene</button>
+      <button onclick="tap(); selectType('schnell',     'Schnell/Mix',       'Colorwaschmittel (Pulver)',  '40°C', 1400)">🌈 Mix / Schnell</button>
+      <button onclick="tap(); selectType('sport',       'Sportswear',        'Sportwaschmittel (flüssig)', '30°C',  800)">🏃 Sport</button>
+      <button onclick="tap(); selectType('eco',         'Eco 40-60',         'Colorwaschmittel (Pulver)',  'auto', 1400)">🌿 Eco</button>
+      <button onclick="tap(); selectType('wolle',       'Wolle',             'Wollwaschmittel (flüssig)', '30°C',  800)">🐑 Wolle</button>
+      <button onclick="tap(); selectType('fein',        'Fein/Seide',        'Feinwaschmittel (flüssig)', '30°C',  800)">🎀 Fein/Seide</button>
+      <button onclick="tap(); selectType('pflegeleicht','Pflegeleicht',      'Colorwaschmittel (flüssig)', '40°C', 1200)">👗 Pflegeleicht</button>
+      <button onclick="tap(); selectType('blusen',      'Blusen/Hemden',     'Colorwaschmittel (flüssig)', '40°C',  800)">👔 Blusen/Hemden</button>
+      <button onclick="tap(); selectType('extrakurz',   'Extra Kurz 15\'/30\'','Colorwaschmittel (Pulver)', '30°C', 1200)">🕒 Extra Kurz</button>
+      <button onclick="tap(); selectType('pflegeplus',  'Pflegeleicht Plus', 'Flüssigwaschmittel (dunkel)','30°C', 1200)">👖 Pflegeleicht+</button>
     </div>
     <div style="margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-        <button style="background:#fff0f5; color:var(--sos); border-color:var(--sos);" onclick="tap(); showStep('stain-sos')">🆘 Flecken SOS</button>
-        <button style="background:#fff0f5; color:var(--secondary);" onclick="tap(); showStep('maintenance')">⚙️ Wartung</button>
+      <button style="background:#fff0f5; color:var(--sos); border-color:var(--sos);" onclick="tap(); showStep('stain-sos')">🆘 Flecken SOS</button>
+      <button style="background:#fff0f5; color:var(--secondary);" onclick="tap(); showStep('maintenance')">⚙️ Wartung</button>
     </div>
   </div>
 
+  <!-- STEP 2: Einstellen (Regler + Tasten) -->
   <div id="step2" class="step-box">
-    <h2>Gute Wahl.</h2>
-    <p id="mode-question" style="color: var(--text); font-weight: 600;"></p>
-    <div class="grid" id="mode-grid">
-      <button class="mode-btn" onclick="tap(); selectMode('wash')"><span>🧼</span>Nur Waschen</button>
-      <button class="mode-btn" id="btn-both" onclick="tap(); selectMode('both')" style="border: 3px solid var(--dry);"><span>🔄</span>Waschen+Trocknen</button>
-      <button class="mode-btn" id="btn-dry" onclick="tap(); selectMode('dry')"><span>🔥</span>Nur Trocknen</button>
-    </div>
-    <p id="mode-hint" style="color: var(--secondary); font-size: 0.85rem; text-align: center; margin-top: 15px;"></p>
-    <button class="next" class="next back-btn" onclick="tap(); showStep(1)">← Auswahl ändern</button>
-  </div>
+    <h2>1. Programm einstellen</h2>
+    <p style="font-size:0.9rem; color:var(--text); margin-top:8px;">
+      Dreh den Regler auf <b id="prog-name" style="color:var(--accent);"></b>
+    </p>
 
-  <div id="step3" class="step-box">
-    <h2 id="step3-title">1. Einstellungen</h2>
+    <!-- Drehregler -->
     <div class="knob-container">
-      <div class="knob-wrapper">
-        <svg class="knob-svg" id="knob" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="45" fill="#334155" stroke="#475569" stroke-width="2"/>
-          <circle cx="50" cy="50" r="38" fill="none" stroke="#1e293b" stroke-width="1"/>
-          <rect x="47" y="8" width="6" height="25" rx="3" fill="var(--primary)"/>
-          <circle cx="50" cy="50" r="12" fill="#475569"/>
-        </svg>
-        <div class="program-labels" id="prog-labels">
-          <!-- Labels werden per JS positioniert -->
+      <div class="knob-outer">
+        <div class="program-ring"></div>
+        <div class="prog-tick" id="prog-tick"></div>
+        <div class="knob-btn" id="knob-btn">
+          <div class="knob-marker"></div>
+          <div class="knob-center-dot"></div>
         </div>
       </div>
-      <p style="margin-top:15px;">Regler auf: <b id="display-prog" style="color: var(--accent); font-size: 1.1rem;"></b></p>
+      <p style="margin-top:15px; font-size:0.9rem;">
+        Regler auf: <b id="display-prog" style="color:var(--accent); font-size:1.05rem;"></b>
+      </p>
     </div>
-    <div id="temp-hint" class="instruction-card">
-      Temperatur: <b id="display-temp"></b>
+
+    <!-- Temperatur & Schleudern -->
+    <div class="instruction-card">
+      <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+        <div>🌡️ Temperatur: <b id="display-temp" style="color:var(--accent);"></b></div>
+        <div>🌀 Schleudern: <b id="display-spin" style="color:var(--accent);"></b></div>
+      </div>
+      <div id="speed-perfect-hint" style="display:none; margin-top:8px;">
+        <span class="speed-badge">⚡ Speed Perfect möglich → Programm wird kürzer!</span>
+      </div>
     </div>
-    <div id="daunen-spin-warning" class="warning-card" style="display:none; border-color:var(--sos); background:#450a0a44;">
-      <strong>⚠️ WICHTIG – Schleudern anpassen!</strong><br>
-      Daunen vertragen kein starkes Schleudern.<br>
-      <span style="font-size: 1.05rem; color: var(--accent);">→ Taste <b>Schleudern</b> drücken bis <b>400</b> oder <b>0</b></span>
+
+    <!-- Bosch-Tasten-Leiste -->
+    <p style="font-size:0.8rem; color:#888; margin-bottom:6px; font-weight:600;">Tasten am Display:</p>
+    <div class="bosch-buttons" id="bosch-buttons-row">
+      <div class="bosch-btn" id="btn-temp">Temp.<br>°C</div>
+      <div class="bosch-btn" id="btn-schleudern">Schleudern</div>
+      <div class="bosch-btn" id="btn-fertigin">Fertig<br>in</div>
+      <div class="bosch-btn" id="btn-speed">Speed<br>Perfect</div>
+      <div class="bosch-btn" id="btn-spuelen">Spülen<br>Plus</div>
+      <div class="bosch-btn" id="btn-vorwaesche">Vorwäsche</div>
+      <div class="bosch-btn start-btn">Start/<br>Nachlegen</div>
     </div>
-    <div id="dry-hint" class="warning-card" style="display:none; border-color:var(--dry);">
-      <strong>🔥 Trocknen-Check:</strong><br>
-      <span id="dynamic-dry-text"></span>
+
+    <div id="special-warning" class="warning-card" style="display:none;">
+      <span id="special-warning-text"></span>
     </div>
-    <button class="next" onclick="tap(); nextFromStep3()">Alles eingestellt! →</button>
-    <button class="next" class="next back-btn" onclick="tap(); showStep(2)">← Zurück</button>
+
+    <button class="next" onclick="tap(); showStep('step3')">Eingestellt! →</button>
+    <button class="back-btn next" onclick="tap(); showStep('step1')">← Andere Wäsche</button>
   </div>
 
-  <div id="step4" class="step-box">
+  <!-- STEP 3: Waschmittel -->
+  <div id="step3" class="step-box">
     <h2>2. Waschmittel</h2>
     <div class="instruction-card">
-      Deine Empfehlung: <b id="detergent-type" style="color: var(--accent);"></b>
+      Empfehlung: <b id="detergent-type" style="color:var(--accent);"></b>
     </div>
     <div class="drawer">
-      <div class="compartment">I</div>
       <div class="compartment active">II<br><small>Hauptfach</small></div>
       <div class="compartment active" id="softener-box">✿<br><small>Weichspüler</small></div>
+      <div class="compartment" id="comp-I">I<br><small>Vorwäsche</small></div>
     </div>
     <p class="subtle-hint" id="dynamic-hint-wash"></p>
-    <button class="next" onclick="tap(); showStep(5)">Bereit! →</button>
-    <button class="next" class="next back-btn" onclick="tap(); showStep(3)">← Zurück</button>
+    <div id="eco-hint" style="display:none;" class="warning-card" style="border-color:#4caf50; background:#0a2e0a44;">
+      <strong>🌿 Eco 40-60:</strong><br>
+      Temperatur wird automatisch angepasst – nicht verändern. Läuft länger, spart aber Energie!
+    </div>
+    <button class="next" onclick="tap(); showStep('step4')">Bereit! →</button>
+    <button class="back-btn next" onclick="tap(); showStep('step2')">← Zurück</button>
   </div>
 
-  <div id="step5" class="step-box">
+  <!-- STEP 4: Letzter Check -->
+  <div id="step4" class="step-box">
     <h2>3. Letzter Check</h2>
     <div class="instruction-card">
       <ul style="margin: 0; padding-left: 20px; line-height: 2.2;">
         <li>Tür ist sicher zugeklickt.</li>
-        <li id="extra-hint">Die Trommel hat noch Platz.</li>
+        <li id="extra-hint">Die Trommel hat noch Platz (max. <span id="max-load"></span> kg).</li>
+        <li>Waschmittelschublade geschlossen.</li>
       </ul>
     </div>
-    <p id="dynamic-hint-final" style="text-align: center; margin-bottom: 5px; font-size: 0.95rem; color: var(--accent);"></p>
-    <button class="next" style="background: var(--safe); color: white;" onclick="tapSuccess(); finish()">Programm starten ✅</button>
-    <button class="next" class="next back-btn" onclick="tap(); backFromStep5()">← Zurück</button>
+    <p id="dynamic-hint-final" style="text-align:center; margin-bottom:5px; font-size:0.95rem; color:var(--accent);"></p>
+    <button class="next" style="background:var(--safe); color:white;" onclick="tapSuccess(); finish()">
+      ▶ Start / Nachlegen drücken ✅
+    </button>
+    <button class="back-btn next" onclick="tap(); showStep('step3')">← Zurück</button>
   </div>
 
-  <div id="success" class="step-box" style="text-align: center;">
-    <div style="font-size: 4rem; margin: 20px 0;">🫧</div>
-    <h2 style="color: var(--safe);">Läuft perfekt!</h2>
-    <p id="praise-text" style="font-weight: 500; color: var(--accent); margin-bottom: 20px;"></p>
+  <!-- SUCCESS -->
+  <div id="success" class="step-box" style="text-align:center;">
+    <div style="font-size:4rem; margin:20px 0;">🫧</div>
+    <h2 style="color:var(--safe);">Läuft perfekt!</h2>
+    <p id="praise-text" style="font-weight:500; color:var(--accent); margin-bottom:20px;"></p>
+    <p style="font-size:0.85rem; color:#888;">
+      Display zeigt Restzeit · Bei Programmende: <b>End</b>
+    </p>
     <button class="next" onclick="tap(); location.reload()">Neuer Waschgang</button>
-  </div>
-
-  <!-- DAUNEN ZWISCHENSCHRITT -->
-  <div id="daunen-tennis" class="step-box" style="text-align: center;">
-    <div style="font-size: 4rem; margin: 20px 0;">🎾</div>
-    <h2 style="color: var(--accent);">Waschgang fertig!</h2>
-    <div class="instruction-card" style="text-align: left; margin: 20px 0;">
-      <strong>Jetzt wichtig, Vera:</strong><br><br>
-      1. Tür öffnen<br>
-      2. <b style="color: var(--accent);">3 Tennisbälle</b> mit in die Trommel legen<br>
-      3. Tür schließen
-    </div>
-    <p style="color: var(--secondary); font-size: 0.9rem;">Die Bälle lockern die Daunen beim Trocknen auf – so werden sie schön flauschig!</p>
-    <button class="next" style="background: var(--dry);" onclick="tap(); showStep('daunen-dry-setup')">Weiter zum Trocknen 🔥</button>
-    <button class="next" style="background: transparent; color: #94a3b8; border: 1px solid #334155; margin-top: 10px;" onclick="tap(); location.reload()">Später trocknen</button>
-  </div>
-
-  <!-- DAUNEN TROCKNEN -->
-  <div id="daunen-dry-setup" class="step-box">
-    <h2>🔥 Trocknen einstellen</h2>
-    <div class="knob-container">
-      <div class="knob-wrapper">
-        <svg class="knob-svg" style="transform: rotate(225deg);" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="45" fill="#334155" stroke="#475569" stroke-width="2"/>
-          <circle cx="50" cy="50" r="38" fill="none" stroke="#1e293b" stroke-width="1"/>
-          <rect x="47" y="8" width="6" height="25" rx="3" fill="var(--dry)"/>
-          <circle cx="50" cy="50" r="12" fill="#475569"/>
-        </svg>
-        <div class="program-labels" id="prog-labels-dry"></div>
-      </div>
-      <p style="margin-top:15px;">Regler auf: <b style="color: var(--dry); font-size: 1.1rem;">Baumwolle trocknen</b></p>
-    </div>
-    <div class="instruction-card">
-      Trockengrad: <b>Schranktrocken</b><br>
-      <small>Taste <b>Trockengrad</b> drücken bis das Schrank-Symbol leuchtet.</small>
-    </div>
-    <div class="warning-card" style="border-color:var(--dry);">
-      <strong>🔥 Geduld haben:</strong><br>
-      Daunen brauchen lange zum Trocknen. Lieber 2x durchlaufen lassen als feucht rausholen!
-    </div>
-    <button class="next" style="background: var(--safe); color: white;" onclick="tapSuccess(); showStep('success')">Trockner starten ✅</button>
-    <button class="next" class="next back-btn" onclick="tap(); showStep('daunen-tennis')">← Zurück</button>
   </div>
 
   <!-- FLECKEN SOS -->
   <div id="stain-sos" class="step-box">
     <h2>🆘 Flecken SOS</h2>
-    <p style="color: var(--secondary); font-size: 0.9rem; margin-bottom: 15px;">Erst behandeln, dann waschen!</p>
-    
-    <div class="stain-item">
-      <b>🍷 Rotwein</b><br>
-      Sofort mit Salz bestreuen, 10 Min. einwirken. Mit Mineralwasser ausspülen, dann 40°C waschen.
-    </div>
-    
-    <div class="stain-item">
-      <b>🩸 Blut</b><br>
-      Nur kaltes Wasser! Niemals heiß. Mit Gallseife einreiben, 30 Min. einweichen, dann kalt waschen.
-    </div>
-    
-    <div class="stain-item">
-      <b>🌿 Gras</b><br>
-      Mit Zitronensaft oder Essig betupfen. 15 Min. einwirken, dann bei 40°C waschen.
-    </div>
-    
-    <div class="stain-item">
-      <b>🍳 Fett / Öl</b><br>
-      Spülmittel direkt auftragen, sanft einreiben. 30 Min. warten, dann möglichst heiß waschen.
-    </div>
-    
-    <div class="stain-item">
-      <b>☕ Kaffee / Tee</b><br>
-      Mit lauwarmem Wasser ausspülen. Gallseife oder Fleckensalz drauf, dann 60°C waschen.
-    </div>
-    
-    <div class="stain-item">
-      <b>🖊️ Kugelschreiber</b><br>
-      Mit Haarspray oder Alkohol betupfen (nicht reiben!). Dann normal waschen.
-    </div>
-    
-    <button class="next" onclick="tap(); showStep(1)">← Zurück</button>
+    <p style="color:var(--secondary); font-size:0.9rem; margin-bottom:15px;">Erst behandeln, dann waschen!</p>
+    <div class="stain-item"><b>🍷 Rotwein</b><br>Sofort mit Salz bestreuen, 10 Min. einwirken. Mit Mineralwasser ausspülen, dann 40°C waschen.</div>
+    <div class="stain-item"><b>🩸 Blut</b><br>Nur kaltes Wasser! Mit Gallseife einreiben, 30 Min. einweichen, dann kalt waschen.</div>
+    <div class="stain-item"><b>🌿 Gras</b><br>Mit Zitronensaft betupfen, 15 Min. einwirken, dann bei 40°C waschen.</div>
+    <div class="stain-item"><b>🍳 Fett / Öl</b><br>Spülmittel direkt auftragen, sanft einreiben, 30 Min. warten, dann heiß waschen.</div>
+    <div class="stain-item"><b>☕ Kaffee / Tee</b><br>Mit lauwarmem Wasser ausspülen, Gallseife drauf, dann 60°C waschen.</div>
+    <div class="stain-item"><b>🖊️ Kugelschreiber</b><br>Mit Haarspray oder Alkohol betupfen (nicht reiben!), dann normal waschen.</div>
+    <button class="next" onclick="tap(); showStep('step1')">← Zurück</button>
   </div>
 
   <!-- WARTUNG -->
   <div id="maintenance" class="step-box">
     <h2>⚙️ Gerätepflege</h2>
-    <p style="color: var(--secondary); font-size: 0.9rem; margin-bottom: 15px;">Damit dein WAT 7186 lange hält.</p>
-    
-    <div class="maint-item">
-      <b>🧹 Waschmittelschublade</b><br>
-      Herausziehen, unter fließendem Wasser abspülen.
-      <span class="freq">Alle 2-4 Wochen</span>
-    </div>
-    
-    <div class="maint-item">
-      <b>🔘 Türdichtung</b><br>
-      Mit feuchtem Tuch abwischen, Falten nicht vergessen.
-      <span class="freq">Nach jedem Waschen kurz prüfen</span>
-    </div>
-    
-    <div class="maint-item">
-      <b>🚰 Flusensieb / Ablaufpumpe</b><br>
-      Wartungsklappe unten öffnen, Wasser ablassen, Filter reinigen.
-      <span class="freq">1x pro Monat</span>
-    </div>
-    
-    <div class="maint-item">
-      <b>🔧 Zulauffilter</b><br>
-      Schlauch abschrauben, Sieb mit Bürste reinigen.
-      <span class="freq">Alle 3 Monate</span>
-    </div>
-    
-    <div class="maint-item">
-      <b>🌀 Trommelreinigung</b><br>
-      Programm <b>»Trommelreinigung«</b> ohne Wäsche starten.
-      <span class="freq">1x pro Monat</span>
-    </div>
-    
-    <div class="maint-item">
-      <b>🚪 Tür offen lassen</b><br>
-      Nach dem Waschen Tür einen Spalt offen – verhindert Gerüche.
-      <span class="freq">Immer</span>
-    </div>
-    
-    <button class="next" onclick="tap(); showStep(1)">← Zurück</button>
+    <p style="color:var(--secondary); font-size:0.9rem; margin-bottom:15px;">Damit deine Bosch WAN282K3 lange hält.</p>
+    <div class="maint-item"><b>🧹 Waschmittelschublade</b><br>Herausziehen (Einsatz runterdrücken), unter fließendem Wasser abspülen, Öffnung wischen.<span class="freq">Alle 2–4 Wochen</span></div>
+    <div class="maint-item"><b>🔘 Türdichtung (Manschette)</b><br>Mit feuchtem Tuch abwischen, Falten nicht vergessen. Trocken wischen nach dem Waschen.<span class="freq">Nach jedem Waschen</span></div>
+    <div class="maint-item"><b>🚰 Laugenpumpe / Flusensieb</b><br>Wartungsklappe unten öffnen → Entleerungsschlauch → Wasser ablassen → Pumpendeckel rausdrehen → reinigen. Griff danach senkrecht stellen!<span class="freq">Mindestens 1x pro Jahr</span></div>
+    <div class="maint-item"><b>🌀 Trommel reinigen</b><br>Regler auf <b>Trommel reinigen</b> stellen, ohne Wäsche, Pulvervollwaschmittel (halbe Dosis) in Fach II. Kein Flüssigmittel!<span class="freq">1x pro Monat (bei häufig 40°C waschen)</span></div>
+    <div class="maint-item"><b>🚪 Tür & Schublade offen lassen</b><br>Nach dem Waschen einen Spalt offen lassen – verhindert Gerüche und Bakterien.<span class="freq">Immer!</span></div>
+    <button class="next" onclick="tap(); showStep('step1')">← Zurück</button>
   </div>
 
 </div>
 
 <script>
-  let state = { type: '', prog: '', det: '', temp: '', mode: '', deg: 0 };
+  // ── ZUSTANDSVARIABLEN ──────────────────────────────────────────
+  let state = { type: '', prog: '', det: '', temp: '', spin: 0, maxLoad: 8 };
 
-  // Programm-Positionen auf dem Drehregler (Winkel in Grad, 0° = oben)
+  // ── BOSCH WAN282K3 PROGRAMME (exakt vom Foto, Uhrzeigersinn) ──
+  // Winkel: 0° = 12 Uhr (Aus). Positiv = Uhrzeigersinn.
   const programs = [
-    { id: 'baumwolle', label: 'Baumw.', angle: 0 },
-    { id: 'pflege', label: 'Pflege', angle: 40 },
-    { id: 'daunen', label: 'Daunen', angle: 45 },
-    { id: 'sport', label: 'Synth.', angle: 75 },
-    { id: 'mix', label: 'Mix', angle: 110 },
-    { id: 'wolle', label: 'Wolle', angle: 150 },
-    { id: 'schnell', label: '15\'', angle: 190 },
-    { id: 'trocknen', label: '🔥', angle: 225 },
-    { id: 'anti', label: 'Allerg.', angle: 270 }
+    { id: 'aus',          label: 'Aus',              angle: 0   },
+    { id: 'baumwolle',    label: 'Baumwolle',        angle: 25  },
+    { id: 'eco',          label: 'Eco 40-60',        angle: 55  },
+    { id: 'pflegeleicht', label: 'Pflege-\nleicht',  angle: 83  },
+    { id: 'fein',         label: 'Fein/\nSeide',     angle: 110 },
+    { id: 'wolle',        label: '🐑 Wolle',         angle: 137 },
+    { id: 'schnell',      label: 'Schnell/\nMix',    angle: 163 },
+    { id: 'spuelen',      label: 'Spülen',           angle: 188 },
+    { id: 'schleudern',   label: 'Schleudern/\nAbp.',angle: 210 },
+    { id: 'trommel',      label: 'Trommel\nreinigen',angle: 235 },
+    { id: 'pflegeplus',   label: 'Pflege-\nleicht+', angle: 258 },
+    { id: 'extrakurz',    label: 'Extra\nKurz',      angle: 283 },
+    { id: 'sport',        label: 'Sports-\nwear',    angle: 308 },
+    { id: 'blusen',       label: 'Blusen/\nHemden',  angle: 330 },
+    { id: 'hygiene',      label: 'Hygiene\nPlus',    angle: 347 },
+    { id: 'iron',         label: 'Iron\nAssist',     angle: 358 },
   ];
 
-  const hintPoolWash = ["Weniger ist oft mehr.", "Deine Kleidung dankt es dir.", "Perfekt dosiert.", "Fingerspitzengefühl zählt."];
+  // Mapping: welcher Programmname → welche ID auf dem Regler
+  const typeToKnob = {
+    baumwolle:   'baumwolle',
+    baumwolle60: 'baumwolle',
+    baumwolle90: 'baumwolle',
+    hygiene:     'hygiene',
+    schnell:     'schnell',
+    sport:       'sport',
+    eco:         'eco',
+    wolle:       'wolle',
+    fein:        'fein',
+    pflegeleicht:'pflegeleicht',
+    blusen:      'blusen',
+    extrakurz:   'extrakurz',
+    pflegeplus:  'pflegeplus',
+  };
+
+  // Max. Beladung lt. Anleitung
+  const maxLoads = {
+    baumwolle:8, baumwolle60:8, baumwolle90:8, hygiene:6.5, schnell:4, sport:2,
+    eco:8, wolle:2, fein:2, pflegeleicht:4, blusen:2, extrakurz:4, pflegeplus:4
+  };
+
+  // Welche Typen Speed Perfect empfehlen
+  const speedPerfectTypes = ['baumwolle','baumwolle90','schnell','extrakurz'];
+
+  // Welche Typen KEINEN Weichspüler wollen
+  const noSoftener = ['sport','wolle','fein'];
+
+  const hintPoolWash  = ["Weniger ist oft mehr – halbe Dosis reicht oft!", "Pulver für weiße Wäsche, Flüssig für Buntes.", "Kammer II ist das Hauptfach. Kammer I nur bei Vorwäsche.", "Dosierung laut Packungsangabe."];
   const hintPoolFinal = ["Vera, du hast alles perfekt vorbereitet.", "Alles im Griff – wie immer.", "Du hast an jedes Detail gedacht."];
-  const welcomePool = [{h: "Gutes Gelingen, Vera! ✨", s: "Was waschen wir heute?"}, {h: "Hallo Vera! 👋", s: "Bereit für Frische?"}];
-  const dryPool = ["Aktiviere Schranktrocken. Weniger Beladung = flauschiger!", "Halbe Füllung trocknet am besten.", "Luft braucht Platz zum Zirkulieren!"];
+  const welcomePool   = [
+    { h: "Gutes Gelingen, Vera! ✨", s: "Was waschen wir heute?" },
+    { h: "Hallo Vera! 👋", s: "Bereit für Frische?" },
+    { h: "Frische Wäsche wartet! 🫧", s: "Wähle dein Programm." }
+  ];
 
-  // Haptic Feedback
-  function tap() {
-    if (navigator.vibrate) navigator.vibrate(10);
-  }
-  function tapSuccess() {
-    if (navigator.vibrate) navigator.vibrate([10, 50, 10]);
-  }
+  // ── HAPTIC ────────────────────────────────────────────────────
+  function tap()        { if (navigator.vibrate) navigator.vibrate(10); }
+  function tapSuccess() { if (navigator.vibrate) navigator.vibrate([10,50,10]); }
 
+  // ── INIT ──────────────────────────────────────────────────────
   function initApp() {
     const r = Math.floor(Math.random() * welcomePool.length);
-    document.getElementById('welcome-msg').innerText = welcomePool[r].h;
-    document.getElementById('welcome-sub').innerText = welcomePool[r].s;
-    document.getElementById('dynamic-hint-wash').innerText = hintPoolWash[Math.floor(Math.random() * hintPoolWash.length)];
-    document.getElementById('dynamic-hint-final').innerText = hintPoolFinal[Math.floor(Math.random() * hintPoolFinal.length)];
-    document.getElementById('dynamic-dry-text').innerText = dryPool[Math.floor(Math.random() * dryPool.length)];
-    
-    // Programm-Labels um den Regler positionieren
-    createProgramLabels('prog-labels');
-    createProgramLabels('prog-labels-dry');
+    document.getElementById('welcome-msg').textContent  = welcomePool[r].h;
+    document.getElementById('welcome-sub').textContent  = welcomePool[r].s;
+    document.getElementById('dynamic-hint-wash').textContent  = hintPoolWash[Math.floor(Math.random() * hintPoolWash.length)];
+    document.getElementById('dynamic-hint-final').textContent = hintPoolFinal[Math.floor(Math.random() * hintPoolFinal.length)];
+    buildProgramLabels();
   }
 
-  function createProgramLabels(containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    
-    const radius = 75; // Abstand vom Zentrum
-    const centerX = 90;
-    const centerY = 90;
-    
-    programs.forEach(prog => {
-      const label = document.createElement('div');
-      label.className = 'prog-label';
-      label.id = `label-${prog.id}-${containerId}`;
-      label.innerText = prog.label;
-      
-      // Position berechnen (Winkel im Uhrzeigersinn, 0° = oben)
-      const angleRad = (prog.angle - 90) * Math.PI / 180;
-      const x = centerX + radius * Math.cos(angleRad);
-      const y = centerY + radius * Math.sin(angleRad);
-      
-      label.style.left = x + 'px';
-      label.style.top = y + 'px';
-      
-      container.appendChild(label);
+  // ── REGLER-LABELS AUFBAUEN ────────────────────────────────────
+  function buildProgramLabels() {
+    const tick = document.getElementById('prog-tick');
+    tick.innerHTML = '';
+    const r = 95; // Radius für Labels (px, bei 220px Breite → 110px Zentrum)
+    programs.forEach(p => {
+      const angleRad = (p.angle - 90) * Math.PI / 180;
+      const x = 110 + r * Math.cos(angleRad);
+      const y = 110 + r * Math.sin(angleRad);
+      const span = document.createElement('span');
+      span.id = 'lbl-' + p.id;
+      span.textContent = p.label;
+      span.style.left = x + 'px';
+      span.style.top  = y + 'px';
+      tick.appendChild(span);
     });
   }
 
-  function highlightProgram(type) {
-    // Alle Labels zurücksetzen
-    document.querySelectorAll('.prog-label').forEach(l => l.classList.remove('active'));
-    
-    // Kochwaesche und Hygiene nutzen das Baumwolle-Programm
-    let labelType = type;
-    if (type === 'kochwaesche' || type === 'hygiene') {
-      labelType = 'baumwolle';
-    }
-    
-    // Aktuelles Programm hervorheben
-    const label = document.getElementById(`label-${labelType}-prog-labels`);
-    if (label) label.classList.add('active');
+  // ── REGLER DREHEN & LABEL HIGHLIGHTEN ─────────────────────────
+  function setKnob(progId) {
+    document.querySelectorAll('.prog-tick span').forEach(s => s.classList.remove('active'));
+    const prog = programs.find(p => p.id === progId);
+    if (!prog) return;
+    document.getElementById('knob-btn').style.transform =
+      `translate(-50%, -50%) rotate(${prog.angle}deg)`;
+    const lbl = document.getElementById('lbl-' + progId);
+    if (lbl) lbl.classList.add('active');
   }
 
-  function selectType(type, prog, det, temp) {
-    state.type = type; state.prog = prog; state.det = det; state.temp = temp;
-    const angles = { baumwolle:0, kochwaesche:0, hygiene:0, mix:110, sport:75, anti:270, wolle:150, daunen:45, schnell:190, pflege:40 };
-    state.deg = angles[type] || 0;
-    
-    if (type === 'daunen') {
-      document.getElementById('mode-question').innerText = `Daunen werden erst gewaschen, dann getrocknet.`;
-      document.getElementById('btn-both').style.display = 'none';
-      document.getElementById('btn-dry').style.display = 'none';
-    } else {
-      document.getElementById('mode-question').innerText = `Vera, wie soll ich dich bei ${type.toUpperCase()} unterstützen?`;
-      document.getElementById('btn-both').style.display = (type === 'wolle' || type === 'schnell') ? 'none' : 'flex';
-      document.getElementById('btn-dry').style.display = (type === 'wolle' || type === 'schnell') ? 'none' : 'flex';
-    }
+  // ── TASTEN HIGHLIGHTEN ────────────────────────────────────────
+  function setButtonHighlights(temp, spin, type) {
+    ['btn-temp','btn-schleudern','btn-fertigin','btn-speed','btn-spuelen','btn-vorwaesche']
+      .forEach(id => document.getElementById(id).classList.remove('highlight'));
 
-    showStep(2);
+    if (temp && temp !== 'auto') document.getElementById('btn-temp').classList.add('highlight');
+    if (spin) document.getElementById('btn-schleudern').classList.add('highlight');
+    if (speedPerfectTypes.includes(type)) document.getElementById('btn-speed').classList.add('highlight');
   }
 
-  function selectMode(mode) {
-    state.mode = mode;
-    const isDryMode = (mode === 'dry');
-    const isBothMode = (mode === 'both');
-    const isDaunen = (state.type === 'daunen');
-    
-    // WT-Programme haben eigene Positionen am Drehregler
-    // Die Position ist meist direkt neben der W-Position
-    const wtOffset = 15; // WT ist etwas weiter gedreht als W
-    
-    // Programm-Anzeige je nach Modus
-    if (isDryMode) {
-      // Nur Trocknen - eigene Position
-      document.getElementById('display-prog').innerText = "Baumwolle trocknen";
-      document.getElementById('knob').style.transform = `rotate(225deg)`;
-      highlightProgram('trocknen');
-    } else if (isBothMode) {
-      // Waschen+Trocknen - eigenes WT Programm
-      document.getElementById('display-prog').innerText = state.prog + " WT";
-      document.getElementById('knob').style.transform = `rotate(${state.deg + wtOffset}deg)`;
-      highlightProgram(state.type);
+  // ── TYP WÄHLEN ────────────────────────────────────────────────
+  function selectType(type, prog, det, temp, spin) {
+    state = { type, prog, det, temp, spin, maxLoad: maxLoads[type] || 4 };
+
+    const knobId = typeToKnob[type] || 'baumwolle';
+    setKnob(knobId);
+
+    document.getElementById('prog-name').textContent    = prog;
+    document.getElementById('display-prog').textContent = prog;
+    document.getElementById('display-temp').textContent = temp === 'auto' ? 'automatisch (kein Wechsel!)' : temp;
+    document.getElementById('display-spin').textContent = spin + ' U/min max.';
+
+    // Speed Perfect Hinweis
+    document.getElementById('speed-perfect-hint').style.display =
+      speedPerfectTypes.includes(type) ? 'block' : 'none';
+
+    // Taste-Highlights
+    setButtonHighlights(temp, spin, type);
+
+    // Spezialwarnungen
+    const warn = document.getElementById('special-warning');
+    const warnText = document.getElementById('special-warning-text');
+    if (type === 'wolle') {
+      warn.style.display = 'block';
+      warnText.innerHTML = '🐑 <strong>Wolle:</strong> Trommel bewegt sich extra sanft. Kein Weichspüler!';
+    } else if (type === 'fein') {
+      warn.style.display = 'block';
+      warnText.innerHTML = '🎀 <strong>Fein/Seide:</strong> Empfindliche Teile am besten im Wäschenetz waschen!';
+    } else if (type === 'extrakurz') {
+      warn.style.display = 'block';
+      warnText.innerHTML = '🕒 <strong>Extra Kurz:</strong> Nur für leicht verschmutzte Wäsche. Speed Perfect drücken für 15 Min. (max. 2 kg).';
+    } else if (type === 'pflegeplus') {
+      warn.style.display = 'block';
+      warnText.innerHTML = '👖 <strong>Pflegeleicht Plus:</strong> Wäsche <b>auf links drehen</b> und <b>Flüssigwaschmittel</b> verwenden!';
+    } else if (type === 'eco') {
+      warn.style.display = 'block';
+      warnText.innerHTML = '🌿 <strong>Eco 40-60:</strong> Temperatur NICHT anpassen – läuft länger, spart aber deutlich Strom & Wasser!';
     } else {
-      // Nur Waschen
-      document.getElementById('display-prog').innerText = state.prog;
-      document.getElementById('knob').style.transform = `rotate(${state.deg}deg)`;
-      highlightProgram(state.type);
+      warn.style.display = 'none';
     }
-    
-    document.getElementById('display-temp').innerText = isDryMode ? "--" : state.temp;
-    
-    // Temperatur-Hinweis nur beim Waschen anzeigen
-    document.getElementById('temp-hint').style.display = isDryMode ? 'none' : 'block';
-    
-    // Waschmittel-Empfehlung setzen
-    document.getElementById('detergent-type').innerText = state.det;
-    
-    // Trocknen-Hinweis anzeigen bei WT und T
-    document.getElementById('dry-hint').style.display = (isBothMode || isDryMode) ? 'block' : 'none';
-    
-    // Daunen-Schleuder-Warnung anzeigen beim Waschen (W und WT)
-    document.getElementById('daunen-spin-warning').style.display = (isDaunen && !isDryMode) ? 'block' : 'none';
-    
-    // Weichspüler aus bei Daunen/Sport/Wolle
+
+    // Waschmittel-Seite vorbereiten
+    document.getElementById('detergent-type').textContent = det;
     const softener = document.getElementById('softener-box');
-    if(state.type === 'daunen' || state.type === 'sport' || state.type === 'wolle') softener.classList.remove('active');
+    if (noSoftener.includes(type)) softener.classList.remove('active');
     else softener.classList.add('active');
 
-    showStep(3);
+    document.getElementById('eco-hint').style.display = type === 'eco' ? 'block' : 'none';
+
+    // Max-Beladung
+    document.getElementById('max-load').textContent = state.maxLoad;
+
+    showStep('step2');
   }
 
-  function nextFromStep3() {
-    // Bei Nur Trocknen: Waschmittel-Step überspringen
-    if (state.mode === 'dry') {
-      showStep(5);
-    } else {
-      showStep(4);
-    }
+  // ── FINISH ────────────────────────────────────────────────────
+  function finish() {
+    const praises = ["Stark, Vera!", "Du hast es drauf!", "Perfekt organisiert.", "Wie ein Profi."];
+    document.getElementById('praise-text').textContent = praises[Math.floor(Math.random() * praises.length)];
+    showStep('success');
   }
 
-  function backFromStep5() {
-    // Bei Nur Trocknen: zurück zu Step 3 (Waschmittel wurde übersprungen)
-    if (state.mode === 'dry') {
-      showStep(3);
-    } else {
-      showStep(4);
-    }
-  }
-
+  // ── STEP WECHSELN ─────────────────────────────────────────────
   function showStep(n) {
     document.querySelectorAll('.step-box').forEach(s => s.classList.remove('active'));
     const id = (typeof n === 'string') ? n : 'step' + n;
     document.getElementById(id).classList.add('active');
-    window.scrollTo(0,0);
-  }
-
-  function finish() { 
-    const praises = ["Stark, Vera!", "Du hast es drauf!", "Perfekt organisiert.", "Wie ein Profi."];
-    document.getElementById('praise-text').innerText = praises[Math.floor(Math.random() * praises.length)];
-    
-    if (state.type === 'daunen' && state.mode === 'wash') {
-      showStep('daunen-tennis');
-    } else {
-      showStep('success');
-    }
+    window.scrollTo(0, 0);
   }
 </script>
 </body>
