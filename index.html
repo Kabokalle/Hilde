@@ -243,6 +243,45 @@
       padding: 4px 10px; font-size: 0.78rem; font-weight: 700;
       margin-top: 8px;
     }
+
+    /* ── SORTIERHILFE ── */
+    .sort-search {
+      width: 100%; padding: 14px 18px; font-size: 1rem; font-weight: 600;
+      border: 3px solid #ffdae9; border-radius: 25px; outline: none;
+      color: var(--text); background: white; margin-bottom: 18px;
+      box-shadow: 0 3px 0 #ffdae9; font-family: inherit;
+    }
+    .sort-search:focus { border-color: var(--primary); box-shadow: 0 3px 0 var(--primary); }
+    .sort-result {
+      background: #fff0f5; border: 2px solid var(--primary); border-radius: 20px;
+      padding: 14px 16px; margin-bottom: 12px; cursor: pointer; transition: all 0.15s;
+    }
+    .sort-result:active { transform: scale(0.97); }
+    .sort-result .sort-title { font-weight: 800; color: var(--accent); font-size: 1rem; }
+    .sort-result .sort-examples { font-size: 0.82rem; color: #888; margin-top: 3px; }
+    .sort-result .sort-desc { font-size: 0.88rem; color: var(--text); margin-top: 5px; }
+    .sort-empty { text-align:center; color:#aaa; font-style:italic; padding: 20px 0; }
+
+    /* Tooltip-Popup */
+    .prog-tooltip {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(74,21,44,0.75); z-index: 100;
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    .prog-tooltip.open { display: flex; }
+    .tooltip-box {
+      background: white; border-radius: 30px; padding: 25px 20px;
+      max-width: 380px; width: 100%; border: 3px solid var(--primary);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .tooltip-box h3 { color: var(--accent); margin: 0 0 10px; font-size: 1.3rem; }
+    .tooltip-examples { background: #fff0f5; border-radius: 15px; padding: 10px 14px; margin: 10px 0; font-size: 0.88rem; }
+    .tooltip-close {
+      background: var(--primary); color: white; border: none;
+      border-radius: 20px; padding: 12px; width: 100%; margin-top: 15px;
+      font-size: 1rem; font-weight: 800; cursor: pointer; box-shadow: 0 5px 0 #b01550;
+    }
   </style>
 </head>
 <body onload="initApp()">
@@ -251,27 +290,28 @@
   <!-- STEP 1: Wäsche wählen -->
   <div id="step1" class="step-box active">
     <h1 id="welcome-msg">Hallo Vera! ✨</h1>
-    <p class="model-badge">Du schaffst das! </p>
+    <p class="model-badge">Du wirst ja noch zur Hausfrau :)</p>
     <p id="welcome-sub" style="text-align:center; font-weight:700; color: var(--bg); margin-bottom:25px;"></p>
     <div class="grid">
-      <button onclick="tap(); selectType('baumwolle',   'Baumwolle',         'Vollwaschmittel (Pulver)',   '40°C', 1400)">👕 Alltag</button>
-      <button onclick="tap(); selectType('baumwolle60', 'Baumwolle',         'Vollwaschmittel (Pulver)',   '60°C', 1400)">🛁 Handtücher 60°</button>
-      <button onclick="tap(); selectType('baumwolle90', 'Baumwolle',         'Vollwaschmittel (Pulver)',   '90°C', 1400)">🛁 Handtücher 90°</button>
-      <button onclick="tap(); selectType('hygiene',     'Hygiene Plus',      'Vollwaschmittel (Pulver)',   '60°C', 1400)">🦠 Hygiene</button>
-      <button onclick="tap(); selectType('schnell',     'Schnell/Mix',       'Colorwaschmittel (Pulver)',  '40°C', 1400)">🌈 Mix / Schnell</button>
-      <button onclick="tap(); selectType('sport',       'Sportswear',        'Sportwaschmittel (flüssig)', '30°C',  800)">🏃 Sport</button>
-      <button onclick="tap(); selectType('eco',         'Eco 40-60',         'Colorwaschmittel (Pulver)',  'auto', 1400)">🌿 Eco</button>
-      <button onclick="tap(); selectType('wolle',       'Wolle',             'Wollwaschmittel (flüssig)', '30°C',  800)">🐑 Wolle</button>
-      <button onclick="tap(); selectType('fein',        'Fein/Seide',        'Feinwaschmittel (flüssig)', '30°C',  800)">🎀 Fein/Seide</button>
-      <button onclick="tap(); selectType('pflegeleicht','Pflegeleicht',      'Colorwaschmittel (flüssig)', '40°C', 1200)">👗 Pflegeleicht</button>
-      <button onclick="tap(); selectType('blusen',      'Blusen/Hemden',     'Colorwaschmittel (flüssig)', '40°C',  800)">👔 Blusen/Hemden</button>
-      <button onclick="tap(); selectType('extrakurz',   'Extra Kurz 15\'/30\'','Colorwaschmittel (Pulver)', '30°C', 1200)">🕒 Extra Kurz</button>
-      <button onclick="tap(); selectType('pflegeplus',  'Pflegeleicht Plus', 'Flüssigwaschmittel (dunkel)','30°C', 1200)">👖 Pflegeleicht+</button>
+      <button onclick="tap(); selectType('baumwolle',   'Baumwolle',         'Vollwaschmittel (Pulver)',   '40°C', 1400)">👕 Alltag<span onclick="showInfo('baumwolle',event)" style="font-size:0.7rem;opacity:0.5;display:block;">❓ was gehört rein?</span></button>
+      <button onclick="tap(); selectType('baumwolle60', 'Baumwolle',         'Vollwaschmittel (Pulver)',   '60°C', 1400)">🛁 Handtücher 60°<span onclick="showInfo('baumwolle60',event)" style="font-size:0.7rem;opacity:0.5;display:block;">❓ was gehört rein?</span></button>
+      <button onclick="tap(); selectType('baumwolle90', 'Baumwolle',         'Vollwaschmittel (Pulver)',   '90°C', 1400)">🛁 Handtücher 90°<span onclick="showInfo('baumwolle90',event)" style="font-size:0.7rem;opacity:0.5;display:block;">❓ was gehört rein?</span></button>
+      <button onclick="tap(); selectType('hygiene',     'Hygiene Plus',      'Vollwaschmittel (Pulver)',   '60°C', 1400)">🦠 Hygiene<span onclick="showInfo('hygiene',event)" style="font-size:0.7rem;opacity:0.5;display:block;">❓ was gehört rein?</span></button>
+      <button onclick="tap(); selectType('schnell',     'Schnell/Mix',       'Colorwaschmittel (Pulver)',  '40°C', 1400)">🌈 Mix / Schnell<span onclick="showInfo('schnell',event)" style="font-size:0.7rem;opacity:0.5;display:block;">❓ was gehört rein?</span></button>
+      <button onclick="tap(); selectType('sport',       'Sportswear',        'Sportwaschmittel (flüssig)', '30°C',  800)">🏃 Sport<span onclick="showInfo('sport',event)" style="font-size:0.7rem;opacity:0.5;display:block;">❓ was gehört rein?</span></button>
+      <button onclick="tap(); selectType('eco',         'Eco 40-60',         'Colorwaschmittel (Pulver)',  'auto', 1400)">🌿 Eco<span onclick="showInfo('eco',event)" style="font-size:0.7rem;opacity:0.5;display:block;">❓ was gehört rein?</span></button>
+      <button onclick="tap(); selectType('wolle',       'Wolle',             'Wollwaschmittel (flüssig)', '30°C',  800)">🐑 Wolle<span onclick="showInfo('wolle',event)" style="font-size:0.7rem;opacity:0.5;display:block;">❓ was gehört rein?</span></button>
+      <button onclick="tap(); selectType('fein',        'Fein/Seide',        'Feinwaschmittel (flüssig)', '30°C',  800)">🎀 Fein/Seide<span onclick="showInfo('fein',event)" style="font-size:0.7rem;opacity:0.5;display:block;">❓ was gehört rein?</span></button>
+      <button onclick="tap(); selectType('pflegeleicht','Pflegeleicht',      'Colorwaschmittel (flüssig)', '40°C', 1200)">👗 Pflegeleicht<span onclick="showInfo('pflegeleicht',event)" style="font-size:0.7rem;opacity:0.5;display:block;">❓ was gehört rein?</span></button>
+      <button onclick="tap(); selectType('blusen',      'Blusen/Hemden',     'Colorwaschmittel (flüssig)', '40°C',  800)">👔 Blusen/Hemden<span onclick="showInfo('blusen',event)" style="font-size:0.7rem;opacity:0.5;display:block;">❓ was gehört rein?</span></button>
+      <button onclick="tap(); selectType('extrakurz',   'Extra Kurz 15\'/30\'','Colorwaschmittel (Pulver)', '30°C', 1200)">🕒 Extra Kurz<span onclick="showInfo('extrakurz',event)" style="font-size:0.7rem;opacity:0.5;display:block;">❓ was gehört rein?</span></button>
+      <button onclick="tap(); selectType('pflegeplus',  'Pflegeleicht Plus', 'Flüssigwaschmittel (dunkel)','30°C', 1200)">👖 Pflegeleicht+<span onclick="showInfo('pflegeplus',event)" style="font-size:0.7rem;opacity:0.5;display:block;">❓ was gehört rein?</span></button>
     </div>
     <div style="margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
       <button style="background:#fff0f5; color:var(--sos); border-color:var(--sos);" onclick="tap(); showStep('stain-sos')">🆘 Flecken SOS</button>
       <button style="background:#fff0f5; color:var(--secondary);" onclick="tap(); showStep('maintenance')">⚙️ Wartung</button>
     </div>
+    <button style="background: linear-gradient(135deg,#a78bfa,#7c3aed); color:white; border:none; margin-top:14px; border-radius:25px; box-shadow: 0 5px 0 #5b21b6;" onclick="tap(); showStep('sorter')">🔍 Was wasche ich?</button>
   </div>
 
   <!-- STEP 2: Einstellen (Regler + Tasten) -->
@@ -398,6 +438,25 @@
     <div class="maint-item"><b>🌀 Trommel reinigen</b><br>Regler auf <b>Trommel reinigen</b> stellen, ohne Wäsche, Pulvervollwaschmittel (halbe Dosis) in Fach II. Kein Flüssigmittel!<span class="freq">1x pro Monat (bei häufig 40°C waschen)</span></div>
     <div class="maint-item"><b>🚪 Tür & Schublade offen lassen</b><br>Nach dem Waschen einen Spalt offen lassen – verhindert Gerüche und Bakterien.<span class="freq">Immer!</span></div>
     <button class="next" onclick="tap(); showStep('step1')">← Zurück</button>
+  </div>
+
+  <!-- SORTIERHILFE -->
+  <div id="sorter" class="step-box">
+    <h2>🔍 Was wasche ich?</h2>
+    <p style="color:var(--secondary); font-size:0.9rem; margin-bottom:15px;">Tippe ein was du waschen willst – z.B. <em>Jeans</em>, <em>Bettwäsche</em>, <em>Sportshirt</em>…</p>
+    <input class="sort-search" type="text" id="sort-input" placeholder="z.B. Jeans, Handtuch, Pulli…" oninput="doSort(this.value)" autocomplete="off" autocorrect="off" />
+    <div id="sort-results"></div>
+    <button class="next" onclick="tap(); showStep('step1')">← Zurück zur Auswahl</button>
+  </div>
+
+  <!-- TOOLTIP POPUP -->
+  <div class="prog-tooltip" id="prog-tooltip" onclick="closeTooltip()">
+    <div class="tooltip-box" onclick="event.stopPropagation()">
+      <h3 id="tt-title"></h3>
+      <div class="tooltip-examples" id="tt-examples"></div>
+      <p id="tt-desc" style="font-size:0.9rem; color:var(--text); margin:0;"></p>
+      <button class="tooltip-close" onclick="closeTooltip()">Verstanden ✓</button>
+    </div>
   </div>
 
 </div>
@@ -579,12 +638,170 @@
     showStep('success');
   }
 
+  // ── SORTIERHILFE ──────────────────────────────────────────────
+  const sortDB = [
+    {
+      title: '👕 Alltag (Baumwolle)',
+      examples: 'T-Shirts, Unterwäsche, Socken, Bettwäsche, Kissenbezüge, normale Hemden, Jeans (ungefärbt)',
+      desc: 'Das Standard-Programm für robuste Alltagswäsche aus Baumwolle und Mischgewebe.',
+      keywords: ['shirt','tshirt','t-shirt','unterwäsche','socken','bett','kissen','bettwäsche','baumwolle','alltag','jeans','hose','laken','hemd'],
+      action: () => selectType('baumwolle','Baumwolle','Vollwaschmittel (Pulver)','40°C',1400)
+    },
+    {
+      title: '🛁 Handtücher 60°C',
+      examples: 'Handtücher, Waschlappen, Geschirrtücher',
+      desc: 'Normaler Wäschetag. 60°C reicht für hygienisch saubere Handtücher.',
+      keywords: ['handtuch','handtücher','waschlappen','geschirrtuch','badetuch','duschtuch'],
+      action: () => selectType('baumwolle60','Baumwolle','Vollwaschmittel (Pulver)','60°C',1400)
+    },
+    {
+      title: '🛁 Handtücher 90°C',
+      examples: 'Handtücher, Waschlappen – bei Krankheit oder starker Verschmutzung',
+      desc: 'Für maximale Hygiene, z.B. nach Krankheit. Färbt Textilien schneller aus.',
+      keywords: ['handtuch','handtücher','waschlappen','hygiene','krank','keime','desinfizieren','90'],
+      action: () => selectType('baumwolle90','Baumwolle','Vollwaschmittel (Pulver)','90°C',1400)
+    },
+    {
+      title: '🌿 Eco 40-60',
+      examples: 'Normale Alltagswäsche, wenn Zeit keine Rolle spielt',
+      desc: 'Energiesparend – Temperatur wird automatisch geregelt. Läuft länger, verbraucht aber deutlich weniger Strom und Wasser.',
+      keywords: ['eco','sparen','energie','umwelt','strom','langsam','ökologisch'],
+      action: () => selectType('eco','Eco 40-60','Colorwaschmittel (Pulver)','auto',1400)
+    },
+    {
+      title: '👗 Pflegeleicht',
+      examples: 'Blusen, Hemden aus Synthetik, leichte Hosen, Mischgewebe-Shirts',
+      desc: 'Für Synthetik und Mischgewebe – schonender als Baumwolle, verhindert Knitterfalten.',
+      keywords: ['pflegeleicht','synthetik','polyester','fleece','bluse','leichte hose','mischgewebe','chiffon'],
+      action: () => selectType('pflegeleicht','Pflegeleicht','Colorwaschmittel (flüssig)','40°C',1200)
+    },
+    {
+      title: '👖 Pflegeleicht Plus',
+      examples: 'Dunkle Jeans, schwarze Kleidung, farbintensive Textilien',
+      desc: 'Speziell für dunkle und kräftige Farben – schützt vor Ausbleichen. Wäsche auf links drehen und Flüssigwaschmittel verwenden!',
+      keywords: ['jeans','dunkel','schwarz','dunkelblau','farbintensiv','färbt','ausbleichen','dunkle'],
+      action: () => selectType('pflegeplus','Pflegeleicht Plus','Flüssigwaschmittel (dunkel)','30°C',1200)
+    },
+    {
+      title: '🎀 Fein / Seide',
+      examples: 'Seide, Viskose, Spitze, empfindliche Blusen, Dessous, Strümpfe',
+      desc: 'Sehr schonend für empfindliche Materialien. Teile im Wäschenetz waschen!',
+      keywords: ['seide','viskose','spitze','dessous','empfindlich','strümpfe','fein','delikat','lingerie','tüll','chiffon'],
+      action: () => selectType('fein','Fein/Seide','Feinwaschmittel (flüssig)','30°C',800)
+    },
+    {
+      title: '🐑 Wolle',
+      examples: 'Wollpullover, Strickjacken, Merinowolle, Kaschmir',
+      desc: 'Schonprogramm mit langen Pausen – verhindert Einlaufen. Kein Weichspüler, kein Schleudern über 800!',
+      keywords: ['wolle','pullover','pulli','strickjacke','merino','kaschmir','angora','mohair','wollsocken','strick'],
+      action: () => selectType('wolle','Wolle','Wollwaschmittel (flüssig)','30°C',800)
+    },
+    {
+      title: '🏃 Sportswear',
+      examples: 'Sporttrikots, Funktionsshirts, Leggings, Fleece, Microfaser',
+      desc: 'Für Sportkleidung aus Synthetik und Microfaser. Kein Weichspüler – der verstopft die Funktionsfasern!',
+      keywords: ['sport','trikot','funktionsshirt','legging','laufen','fitness','gym','fleece','microfaser','sportswear','sportkleidung'],
+      action: () => selectType('sport','Sportswear','Sportwaschmittel (flüssig)','30°C',800)
+    },
+    {
+      title: '👔 Blusen / Hemden',
+      examples: 'Bügelfrei-Hemden, Büroblusen, leichte Baumwoll-Hemden',
+      desc: 'Speziell für bügelfreie Oberhemden und Blusen – schonender Schleudergang verhindert starke Knitter.',
+      keywords: ['hemd','bluse','bürohemd','bügelfreis','oberhemden','businesshemd','businessbluse'],
+      action: () => selectType('blusen','Blusen/Hemden','Colorwaschmittel (flüssig)','40°C',800)
+    },
+    {
+      title: '🦠 Hygiene Plus',
+      examples: 'Wäsche nach Krankheit, Babykleidung, Allergiker-Wäsche, Unterwäsche bei erhöhtem Hygienebedarf',
+      desc: 'Hält die Temperatur konstant für optimale Hygienewirkung. Für Allergiker empfohlen.',
+      keywords: ['hygiene','allergie','allergiker','baby','krank','keime','desinfizier','pilz','bakterien'],
+      action: () => selectType('hygiene','Hygiene Plus','Vollwaschmittel (Pulver)','60°C',1400)
+    },
+    {
+      title: '🕒 Extra Kurz 15\'/30\'',
+      examples: 'Wenig getragene Sachen, frisch gekaufte Teile, leicht angestaubtes',
+      desc: 'Nur für leicht verschmutzte, kleine Mengen. Mit Speed Perfect: 15 Minuten (max. 2 kg).',
+      keywords: ['schnell','kurz','wenig','frisch','auffrischen','15 min','30 min','eilig','express'],
+      action: () => selectType('extrakurz','Extra Kurz 15\'/30\'','Colorwaschmittel (Pulver)','30°C',1200)
+    },
+    {
+      title: '🌈 Mix / Schnell',
+      examples: 'Gemischte Wäsche (Baumwolle + Synthetik), bunte Alltagswäsche',
+      desc: 'Für gemischte Waschladungen. Gut wenn man nicht sortieren will.',
+      keywords: ['mix','gemischt','bunt','verschiedenes','alles','gemischt','zusammen','schnell'],
+      action: () => selectType('schnell','Schnell/Mix','Colorwaschmittel (Pulver)','40°C',1400)
+    },
+  ];
+
+  function doSort(query) {
+    const q = query.trim().toLowerCase();
+    const container = document.getElementById('sort-results');
+    if (!q) { container.innerHTML = '<p class="sort-empty">Fang einfach an zu tippen… 👆</p>'; return; }
+
+    const results = sortDB.filter(item =>
+      item.keywords.some(k => k.includes(q) || q.includes(k)) ||
+      item.title.toLowerCase().includes(q) ||
+      item.examples.toLowerCase().includes(q)
+    );
+
+    if (!results.length) {
+      container.innerHTML = '<p class="sort-empty">Nichts gefunden – versuch ein anderes Wort 🤔</p>';
+      return;
+    }
+
+    container.innerHTML = results.map((r, i) => `
+      <div class="sort-result" onclick="tap(); ${r.action.toString().replace(/^.*?=>/,'').trim().replace(/^\s*\{|\}\s*$/g,'').trim()}; showStep('step2')">
+        <div class="sort-title">${r.title}</div>
+        <div class="sort-examples">z.B. ${r.examples}</div>
+        <div class="sort-desc">${r.desc}</div>
+      </div>
+    `).join('');
+  }
+
+  // ── TOOLTIP ───────────────────────────────────────────────────
+  const progInfo = {
+    baumwolle:   { title:'👕 Alltag – Baumwolle', ex:'T-Shirts, Unterwäsche, Socken, Bettwäsche, normale Hemden', desc:'Robust und strapazierfähig. Für alle normalen Alltagstextilien aus Baumwolle und Mischgewebe.' },
+    baumwolle60: { title:'🛁 Handtücher 60°C',    ex:'Handtücher, Waschlappen, Geschirrtücher', desc:'60°C reicht für hygienisch saubere Handtücher im Alltag.' },
+    baumwolle90: { title:'🛁 Handtücher 90°C',    ex:'Handtücher nach Krankheit, stark verschmutzte Wäsche', desc:'Maximale Hygiene – z.B. nach Krankheit. Aber: Textilien bleichen schneller aus.' },
+    hygiene:     { title:'🦠 Hygiene Plus',       ex:'Allergiker-Wäsche, Babykleidung, Wäsche nach Krankheit', desc:'Hält die Temperatur konstant – für zuverlässige Hygienewirkung. Empfohlen für Allergiker.' },
+    schnell:     { title:'🌈 Mix / Schnell',      ex:'Gemischte Alltagswäsche, bunte Sachen', desc:'Wenn man nicht genau sortieren will. Baumwolle + Synthetik zusammen, leicht bis normal verschmutzt.' },
+    eco:         { title:'🌿 Eco 40-60',          ex:'Normale Alltagswäsche wenn Zeit keine Rolle spielt', desc:'Temperatur wird automatisch geregelt – NICHT verändern. Läuft länger, spart aber deutlich Strom & Wasser.' },
+    wolle:       { title:'🐑 Wolle',              ex:'Pullover, Strickjacken, Merino, Kaschmir', desc:'Trommel bewegt sich extra sanft mit langen Pausen – verhindert Einlaufen. Kein Weichspüler!' },
+    fein:        { title:'🎀 Fein / Seide',       ex:'Seide, Viskose, Spitze, Dessous, Strümpfe', desc:'Sehr schonend für empfindliche Materialien. Teile im Wäschenetz waschen!' },
+    pflegeleicht:{ title:'👗 Pflegeleicht',       ex:'Blusen, Synthetik-Shirts, leichte Hosen, Mischgewebe', desc:'Für synthetische Materialien – verhindert Knitterfalten besser als das Baumwoll-Programm.' },
+    blusen:      { title:'👔 Blusen / Hemden',    ex:'Büro-Hemden, bügelfrei-Blusen, Oberhemden', desc:'Schonend für bügelfreie Textilien. Niedriger Schleudergang = weniger Knitter.' },
+    extrakurz:   { title:'🕒 Extra Kurz 15′/30′', ex:'Wenig getragene Sachen, frisch gekaufte Teile', desc:'Nur für leicht verschmutzte kleine Mengen. Speed Perfect drücken → 15 Minuten (max. 2 kg).' },
+    pflegeplus:  { title:'👖 Pflegeleicht Plus',  ex:'Dunkle Jeans, schwarze Kleidung, farbintensive Teile', desc:'Schützt kräftige Farben vor dem Ausbleichen. Wäsche auf links drehen + Flüssigwaschmittel!' },
+    sport:       { title:'🏃 Sportswear',         ex:'Sporttrikots, Funktionsshirts, Leggings, Fleece', desc:'Kein Weichspüler – der verstopft die Funktionsfasern! Für Microfaser und Synthetik.' },
+  };
+
+  function showInfo(type, event) {
+    event.stopPropagation();
+    tap();
+    const info = progInfo[type];
+    if (!info) return;
+    document.getElementById('tt-title').textContent = info.title;
+    document.getElementById('tt-examples').innerHTML = '<b>Gehört dazu:</b> ' + info.ex;
+    document.getElementById('tt-desc').textContent = info.desc;
+    document.getElementById('prog-tooltip').classList.add('open');
+  }
+
+  function closeTooltip() {
+    document.getElementById('prog-tooltip').classList.remove('open');
+  }
+
   // ── STEP WECHSELN ─────────────────────────────────────────────
   function showStep(n) {
     document.querySelectorAll('.step-box').forEach(s => s.classList.remove('active'));
     const id = (typeof n === 'string') ? n : 'step' + n;
     document.getElementById(id).classList.add('active');
     window.scrollTo(0, 0);
+    if (n === 'sorter') {
+      const inp = document.getElementById('sort-input');
+      if (inp) { inp.value = ''; }
+      document.getElementById('sort-results').innerHTML = '<p class="sort-empty">Fang einfach an zu tippen… 👆</p>';
+      setTimeout(() => { const inp2 = document.getElementById('sort-input'); if(inp2) inp2.focus(); }, 300);
+    }
   }
 </script>
 </body>
